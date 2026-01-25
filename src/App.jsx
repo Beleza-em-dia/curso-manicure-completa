@@ -45,18 +45,22 @@ const LandingPage = () => {
       <section className="relative text-white pb-20 pt-12 px-4 overflow-hidden min-h-[85vh] flex flex-col justify-center items-center">
         
         {/* --- CAMADA 1: VÍDEO DO YOUTUBE --- */}
-        <div className="absolute inset-0 w-full h-full z-0 overflow-hidden pointer-events-none">
-          <iframe
-            className="absolute top-1/2 left-1/2 w-[300%] h-[300%] -translate-x-1/2 -translate-y-1/2 object-cover pointer-events-none opacity-80"
-            src="https://www.youtube.com/embed/SGiHumnzTT8?autoplay=1&mute=1&loop=1&playlist=SGiHumnzTT8&controls=0&showinfo=0&rel=0&iv_load_policy=3&playsinline=1&enablejsapi=1&start=7"
-            allow="autoplay; encrypted-media"
-            title="Background Video"
-            frameBorder="0"
-          ></iframe>
+        <div className="absolute inset-0 w-full h-full z-0 overflow-hidden">
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline // Essencial para iPhone não abrir em tela cheia
+            className="absolute top-1/2 left-1/2 min-w-full min-h-full w-auto h-auto -translate-x-1/2 -translate-y-1/2 object-cover opacity-60"
+          >
+            {/* O arquivo deve estar na pasta 'public' com o nome 'bg-video.mp4' */}
+            <source src="bg-video.mp4" type="video/mp4" />
+            Seu navegador não suporta vídeos.
+          </video>
         </div>
 
         {/* --- CAMADA 2: MÁSCARA ESCURA (OVERLAY) --- */}
-        <div className="absolute inset-0 bg-slate-900/60 bg-gradient-to-b from-slate-900/90 via-slate-900/60 to-slate-900 z-10"></div>
+        <div className="absolute inset-0 bg-slate-900/40 bg-gradient-to-b from-slate-900/90 via-slate-900/60 to-slate-900 z-10"></div>
 
         {/* --- CAMADA 3: CONTEÚDO --- */}
         <div className="relative z-20 max-w-4xl mx-auto text-center space-y-8 mt-4">
