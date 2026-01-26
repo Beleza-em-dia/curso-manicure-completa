@@ -14,6 +14,9 @@ import {
 const LandingPage = () => {
   // Estado para o contador regressivo (15 minutos)
   const [timeLeft, setTimeLeft] = useState(15 * 60);
+  
+  // Estado para controlar se o pixel de scroll já foi disparado (para não disparar várias vezes)
+  const [scrollPixelDisparado, setScrollPixelDisparado] = useState(false);
 
   // Lógica do Timer
   useEffect(() => {
@@ -22,6 +25,29 @@ const LandingPage = () => {
     }, 1000);
     return () => clearInterval(timer);
   }, []);
+
+  // Lógica de Rastreamento de Scroll (50%)
+  useEffect(() => {
+    const handleScroll = () => {
+      // Se já disparou, encerra para não duplicar eventos
+      if (scrollPixelDisparado) return;
+
+      const alturaTotal = document.documentElement.scrollHeight - window.innerHeight;
+      const posicaoAtual = window.scrollY;
+      const porcentagem = (posicaoAtual / alturaTotal) * 100;
+
+      // Se passou de 50%, dispara o evento
+      if (porcentagem >= 50) {
+        if (window.fbq) {
+          window.fbq('trackCustom', 'Interesse_Scroll_50');
+        }
+        setScrollPixelDisparado(true);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [scrollPixelDisparado]);
 
   // Formatação do tempo (MM:SS)
   const formatTime = (seconds) => {
@@ -80,9 +106,16 @@ const LandingPage = () => {
             Descubra o <b>Protocolo FX</b>: A metodologia baseada em ciência (Método PHAT) para destravar seus resultados, empinar o glúteo e definir as pernas em 30 dias.
           </p>
 
-          {/* Botão CTA */}
+          {/* Botão CTA Hero */}
           <div className="pt-4">
-            <a href="#offer" className="flex flex-col items-center justify-center w-full max-w-md mx-auto bg-gradient-to-r from-green-500 to-green-600 hover:from-green-400 hover:to-green-500 text-white rounded-lg shadow-[0_4px_14px_0_rgba(74,222,128,0.6)] transition-transform hover:-translate-y-1 active:scale-95 py-5 px-6 cursor-pointer no-underline border border-green-400">
+            <a 
+              href="#offer" 
+              onClick={() => {
+                // Evento de Interesse (Clicou no botão do topo para ver o preço)
+                if(window.fbq) window.fbq('trackCustom', 'ClicouHero_VerOferta');
+              }}
+              className="flex flex-col items-center justify-center w-full max-w-md mx-auto bg-gradient-to-r from-green-500 to-green-600 hover:from-green-400 hover:to-green-500 text-white rounded-lg shadow-[0_4px_14px_0_rgba(74,222,128,0.6)] transition-transform hover:-translate-y-1 active:scale-95 py-5 px-6 cursor-pointer no-underline border border-green-400"
+            >
               <span className="font-black text-xl md:text-2xl uppercase tracking-wide leading-none mb-1 text-white drop-shadow-md">
                 QUERO DEFINIR AGORA
               </span>
@@ -265,7 +298,15 @@ const LandingPage = () => {
             </div>
 
             {/* Main CTA */}
-            <a href="https://go.hotmart.com/F104052373S?ap=9f98" className="flex flex-col items-center justify-center w-full bg-green-500 hover:bg-green-400 text-white rounded-lg shadow-[0_0_20px_rgba(34,197,94,0.6)] transition-all hover:scale-105 py-4 mb-4">
+            <a 
+              href="https://go.hotmart.com/F104052373S?ap=9f98" 
+              onClick={() => {
+                // Evento de Intenção de Compra (Clicou para ir ao Checkout)
+                // Usamos Custom para separar do evento automático da Hotmart
+                if(window.fbq) window.fbq('trackCustom', 'ClicouBotaoVenda');
+              }}
+              className="flex flex-col items-center justify-center w-full bg-green-500 hover:bg-green-400 text-white rounded-lg shadow-[0_0_20px_rgba(34,197,94,0.6)] transition-all hover:scale-105 py-4 mb-4"
+            >
               <span className="font-black text-xl uppercase leading-none mb-1">QUERO TREINAR DE VERDADE</span>
             </a>
 
