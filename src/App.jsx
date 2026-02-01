@@ -155,9 +155,9 @@ const LandingPage = () => {
               MÉTODO COMPROVADO
             </span>
             <h1 className="text-4xl md:text-6xl font-extrabold leading-tight mb-6">
-              Transforme sua paixão por unhas em uma Renda de <span className="text-transparent bg-clip-text bg-gradient-to-r from-rose-300 to-amber-300">R$ 3.000 a R$ 5.000</span> por mês.
+              Aprenda a viver da manicure com agenda cheia, <span className=''>mesmo começando do zero!</span>
             </h1>
-            <p className="text-lg md:text-xl text-gray-200 mb-8 max-w-2xl mx-auto font-light">
+            <p className="text-lg md:text-xl text-gray-100 mb-8 max-w-2xl mx-auto font-light">
               O curso completo que vai te tirar do absoluto zero e te tornar uma <b className="text-rose-300">Manicure Profissional</b> disputada na sua cidade, mesmo sem material caro.
             </p>
             
