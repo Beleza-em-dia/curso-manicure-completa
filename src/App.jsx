@@ -100,7 +100,6 @@ const LandingPage = () => {
   // --- FUNÇÕES DE RASTREAMENTO ---
 
   const handlePurchaseClick = (origin) => {
-    console.log(`💰 Pixel Evento: InitiateCheckout | Origem: ${origin}`);
     if (typeof window.fbq === 'function') {
       window.fbq('track', 'InitiateCheckout', { content_name: origin }); 
     }
@@ -108,7 +107,6 @@ const LandingPage = () => {
   };
 
   const handleWhatsAppClick = () => {
-    console.log("💬 Pixel Evento: Contact (WhatsApp)");
     if (typeof window.fbq === 'function') {
       window.fbq('track', 'Contact', { content_name: 'WhatsApp_FAQ' });
     }

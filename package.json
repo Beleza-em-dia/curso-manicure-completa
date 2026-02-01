@@ -1,9 +1,9 @@
 {
-  "name": "protocolo-fx",
+  "name": "curso-manicure-completa",
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://beleza-em-dia.github.io/fx-treinos",
+  "homepage": "https://beleza-em-dia.github.io/curso-manicure-completa/",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
