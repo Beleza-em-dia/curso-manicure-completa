@@ -45,7 +45,7 @@ const LandingPage = () => {
     return `${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
 
-  // 2. Scroll Logic (AQUI ESTÁ A MÁGICA DA SOBREPOSIÇÃO)
+  // 2. Scroll Logic
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.scrollY;
@@ -56,8 +56,6 @@ const LandingPage = () => {
       const faqSection = document.getElementById('faq');     // Seção do FAQ
 
       // --- LÓGICA DO BOTÃO STICKY MOBILE ---
-      // Ele deve aparecer depois de 500px...
-      // MAS deve sumir se chegar na seção de Oferta (para não sobrepor)
       let shouldShowSticky = false;
 
       if (scrollY > 500) {
@@ -65,7 +63,7 @@ const LandingPage = () => {
       }
 
       if (offerSection) {
-        // Se a parte de baixo da tela chegou no topo da seção de oferta (+ um ajuste de 100px para sumir antes de tocar)
+        // Se a parte de baixo da tela chegou no topo da seção de oferta (+ ajuste)
         if (scrollY + windowHeight > offerSection.offsetTop + 100) {
            shouldShowSticky = false;
         }
@@ -97,11 +95,22 @@ const LandingPage = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [pixelFired]);
 
-  // --- FUNÇÕES DE RASTREAMENTO ---
+  // --- FUNÇÕES DE AÇÃO ---
 
+  // Função 1: Rolar até a oferta (Sem Pixel, apenas navegação)
+  const scrollToOffer = () => {
+    const offerSection = document.getElementById('offer');
+    if (offerSection) {
+      offerSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  // Função 2: Ir para o Checkout (Com Pixel AddToCart)
+  // Apenas o botão da oferta chama essa função agora
   const handlePurchaseClick = (origin) => {
     if (typeof window.fbq === 'function') {
-      window.fbq('track', 'InitiateCheckout', { content_name: origin }); 
+      // MUDANÇA: Dispara AddToCart para diferenciar do pixel da Hotmart
+      window.fbq('track', 'AddToCart', { content_name: origin }); 
     }
     window.location.href = CHECKOUT_LINK;
   };
@@ -161,13 +170,13 @@ const LandingPage = () => {
               O curso completo que vai te tirar do absoluto zero e te tornar uma <b className="text-rose-300">Manicure Profissional</b> disputada na sua cidade, mesmo sem material caro.
             </p>
             
-            {/* BOTÃO HERO */}
+            {/* BOTÃO HERO - AGORA FAZ SCROLL PARA A OFERTA */}
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               animate={{ boxShadow: ["0 0 0 rgba(225, 29, 72, 0.4)", "0 0 20px rgba(225, 29, 72, 0.7)", "0 0 0 rgba(225, 29, 72, 0.4)"] }}
               transition={{ duration: 2, repeat: Infinity }}
-              onClick={() => handlePurchaseClick('Botao_Hero_Principal')}
+              onClick={scrollToOffer}
               className="bg-gradient-to-r from-rose-600 to-pink-600 text-white font-bold py-4 px-8 rounded-full text-lg md:text-xl shadow-xl w-full md:w-auto uppercase tracking-wide border-b-4 border-rose-800"
             >
               QUERO ME INSCREVER AGORA
@@ -308,7 +317,7 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* 7. OFERTA (Adicionei ID="offer" aqui) */}
+      {/* 7. OFERTA (ID="offer") */}
       <section id="offer" className="py-20 bg-gradient-to-br from-gray-900 to-gray-800 text-white relative overflow-hidden">
         <div className="absolute top-0 left-0 w-64 h-64 bg-rose-600 rounded-full filter blur-[100px] opacity-20"></div>
         <div className="absolute bottom-0 right-0 w-64 h-64 bg-purple-600 rounded-full filter blur-[100px] opacity-20"></div>
@@ -332,7 +341,7 @@ const LandingPage = () => {
             
             <p className="text-sm text-gray-500 mb-6">ou 10x de R$ 9,49 no cartão</p>
 
-            {/* BOTÃO DA OFERTA */}
+            {/* BOTÃO DA OFERTA (ÚNICO QUE DISPARA PIXEL) */}
             <motion.button
               whileTap={{ scale: 0.95 }}
               animate={{ scale: [1, 1.03, 1] }}
@@ -428,7 +437,7 @@ const LandingPage = () => {
         )}
       </AnimatePresence>
 
-      {/* BOTÃO FLUTUANTE MOBILE (STICKY) */}
+      {/* BOTÃO FLUTUANTE MOBILE (STICKY) - AGORA FAZ SCROLL PARA A OFERTA */}
       <AnimatePresence>
         {showStickyButton && (
           <motion.div 
@@ -438,9 +447,9 @@ const LandingPage = () => {
             transition={{ type: "spring", stiffness: 260, damping: 20 }}
             className="fixed bottom-4 left-4 right-4 z-50 md:hidden"
           >
-            {/* BOTÃO STICKY COM ORIGEM DEFINIDA */}
+            {/* AGORA CHAMA scrollToOffer */}
             <button 
-              onClick={() => handlePurchaseClick('Botao_Sticky_Mobile')}
+              onClick={scrollToOffer}
               className="w-full bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold py-3 rounded-lg shadow-2xl flex justify-center items-center gap-2 border-2 border-white animate-bounce"
             >
               QUERO COMEÇAR AGORA
